@@ -13,7 +13,6 @@ bool DateSyntaxCheck(string str, int amount, char DMY);
 bool checkVarChar(string str);
 bool isInputANumber(string str);
 bool isIDValid(string str);
-vector<char> stringToVarChar(string payload);
 
 class VarChar {        // The class
 public:          // Access specifier
@@ -217,8 +216,8 @@ void option1(bool updateData, int patientIDbefore)
         }
     } while (!passedLastName);
     //assigning first name and last name to a VARCHAR
-    string stringName = firstName + " " + lastName;
-    VarChar nameV(stringName);
+    string nameS = firstName + " " + lastName;
+    VarChar nameV(nameS);
     //currentUser.name = stringName;
     //vector<char> data;
     vector<char> name = stringToVarChar(nameV.payload);
@@ -284,24 +283,21 @@ void option1(bool updateData, int patientIDbefore)
     currentUser.dOB = dateOfBirth;
     //converting the string DOB to a integer as required for storage in the database
     
-//living address input
-    do {
+
+    //living address input
+    while (!passedAddress) {
         cout << "Please enter your living address in format of (streetnumber streetname suburb state)" << endl;
         cout << "Address:\t";
         getline(cin, addressS);
 
         if (checkVarChar(addressS)) {
             //assign varchar value
-            //VarChar address(addressS);
+            VarChar address(addressS);
             passedAddress = true;
         }
-    } while (!passedAddress);
-    VarChar addressV(addressS);
-    //vector<char> data;
-    vector<char> address = stringToVarChar(addressV.payload);
+    }
     currentUser.address = addressS;
 
-	// overseas travel validation and input
     while (ex1 < 1)
     {
         cout << "Have you travelled overseas recently? (yes/no):\t"; // input for if user did overseas travel
@@ -321,12 +317,9 @@ void option1(bool updateData, int patientIDbefore)
     }
     currentUser.overSeas = overSeas;
     ex1--;
-	
     // input for the level of symptoms the user is feeling
     cout << "What level of symptoms are you currently feeling?" << endl;
-	cout << endl;
     ReadSymptoms();
-	cout << endl;
     while (ex1 < 1)
     {
         /* while and case block like the previous blocks to make sure user only inputs integer 1, 2 or 3.
@@ -355,7 +348,6 @@ void option1(bool updateData, int patientIDbefore)
     ex1--;
     currentUser.symptomLevel = symptomLevel;
 
-	//input for amount of Covid locations been to
     cout << "If applicable, how many of these high risk Covid locations have you visted recently?" << endl;
     cout << "input 0 if you have visted none." << endl;
     option3();
@@ -365,7 +357,9 @@ void option1(bool updateData, int patientIDbefore)
 
     cout << endl;
 
-     //Algorithim of if the user needs a covid test or not
+    /*
+     Algorithim of if the user needs a covid test or not
+     */
     cout << "Based on your results," << endl;
     cout << "You are suffering " << symptomLevel << " level symptoms, and have visted " << locationAmnt << " high-risk Covid location sites." << endl << endl;
     if (symptomLevelCode == 3)
@@ -435,16 +429,18 @@ void option1(bool updateData, int patientIDbefore)
 
 void option2()
 {
+	//Initialisation of variables
     char reset = 0, ret, result, status;
     bool IDexistTest = 0;
     bool passedPatientID = 0;
     string patientID = " ";
     int ID;
     string locations = "No"; 
-
+	
+	//sets reset for all code after, so it will run on a loop until reset is at least 1
     while (reset < 1)
     {
-        
+        //checks if inputted ID is in the correct format
         while (!passedPatientID) {
             cout << "Please enter your 6 number ID:\t";
             cin >> patientID;
@@ -453,29 +449,36 @@ void option2()
                 passedPatientID = true;
             }
         }
-
+		//converts the string input of ID to int
         ID = stoi(patientID);
-
+		
+		//checks if id is in database
         IDexistTest = IDexists(ID);
         if (IDexistTest)
         {
+			//ask users if they have the test results
             cout << "Do you have the test results? (y/n):\t";
             cin >> ret;
             switch (ret)
             {
             case 'y':
+				//Ask follow up questions
                 cout << "Were the results Positive(p) or Negative(n)?\t";
                 cin >> result;
                 cout << "Is the patient alive? (y/n)\t";
                 cin >> status;
                 if (result == 'p' and status == 'y')
+					//patient is alive and covid test returned as positive
                 {
+					//output info to user
                     cout << "Please Isolate ASAP!\nYou must now wait 14 days and wait for symptoms to clear before returning outside.\n\nWe will need some more information from you\nPlaces that you have travelled to in the last 2 weeks are now potentially infectious.\n\nPlease provide the names of all places that you spent at least 15 minutes occupying:\n(seperate each entry with a comma, press enter when complete)\n";
                     cin.ignore();
                     getline(cin, locations);
+					//get patient locations
                     string str = locations;
-                    vector<string> v;
+					//start a stringstream
                     stringstream ss(str);
+					//split up locations by ','
                     while (ss.good())
                     {
                         string substr;
@@ -486,6 +489,7 @@ void option2()
                     break;
                 }
                 else if (result == 'n' and status == 'y')
+					//patient is alive and covid test returned as negative
                 {
                     cout << "Perfect! Thanks for your assistance! Hope you feel better soon!";
                     reset++;
@@ -494,31 +498,37 @@ void option2()
                     Menu(0);
                 }
                 else if (status == 'n')
+					//patient is dead
                 {
+					//output info to user
                     cout << "Thats unfortunate to hear, please input the locations that the patient visited in the last 2 weeks:\n\nPlease provide the names of all places that they spent at least 15 minutes occupying:\n(seperate each entry with a comma, press enter when complete)\n";
                     cin.ignore();
                     getline(cin, locations);
+					//get patient locations
                     string str = locations;
-                    vector<string> v;
+					//start a stringstream
                     stringstream ss(str);
+					//split up locations by ','
                     while (ss.good())
                     {
                         string substr;
                         getline(ss, substr, ',');
                         enterHighRisk(substr);
                     }
+                    reset++;
+                    break;
                 }
                 else
                 {
                     cout << "Invalid entry... Please retry!" << endl;
                 }
-                reset++;
-                break;
             case 'n':
+					//case if patient hasnt recieved covid test results
                 cout << "Please wait for your test results to arrive then return.\n";
                 reset++;
                 break;
             default:
+					//catch for incorrect inputs
                 cout << "Invalid entry... Please enter 'y' (yes) or 'n' (no)!" << endl;
             }
             if (IDexistTest && (ret == 'y')) {
@@ -528,14 +538,10 @@ void option2()
         }
         else
         {
+			//resets id input
             cout << "ID is not found please retry!\n";
-            reset++;
         }
-
     }
-
-    
-
 }
 
 bool option3() 
@@ -1270,11 +1276,3 @@ bool checkVarChar(string str) {
     return result;
 
 }
-vector<char> stringToVarChar(string payload) {
-    vector<char> varChar(payload.begin(), payload.end());
-    //vector<char> data(payload.begin(), payload.end());
-    return varChar;
-    
-    
-}
-
