@@ -216,7 +216,7 @@ void option1(bool updateData, int patientIDbefore)
         }
     } while (!passedLastName);
     //assigning first name and last name to a VARCHAR
-    string nameS = firstName + " " + lastName;
+    string stringName = firstName + " " + lastName;
     VarChar nameV(nameS);
     //currentUser.name = stringName;
     //vector<char> data;
