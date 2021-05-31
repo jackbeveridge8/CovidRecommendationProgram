@@ -494,22 +494,13 @@ void option2()
                     getline(cin, locations);
                     string str = locations;
                     vector<string> v;
-
                     stringstream ss(str);
-
-                    while (ss.good()) {
+                    while (ss.good())
+                    {
                         string substr;
                         getline(ss, substr, ',');
-                        v.push_back(substr);
+                        enterHighRisk(substr);
                     }
-
-                    for (size_t i = 0; i < v.size(); i++)
-                    {
-                        //enterHighRisk(str);
-                        //enterHighRisk(str);
-                        //cout << str;
-                    }
-                    enterHighRisk(locations);
                 }
                 else
                 {
