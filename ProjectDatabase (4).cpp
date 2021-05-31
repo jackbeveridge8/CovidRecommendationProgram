@@ -166,12 +166,11 @@ void Menu(bool returningUser)
 void option1(bool updateData, int patientIDbefore)
 {
     user currentUser;
-    string state, suburb, street;
-    // list of all integer variables used
     int symptomLevelCode = 1, locationAmnt;
     // variable purely for exit of the while loops used in conjunction with the case statements
     int ex1 = 0;
 
+	//list of all string variables used and their validation variables used within each while loop.
     string firstName = " "; //first name variable
     bool passedFirstName = false;
     string lastName; //last name variable
@@ -186,6 +185,7 @@ void option1(bool updateData, int patientIDbefore)
     string overSeas; // overseas variable
     bool recommendTest = false;
 
+	//Variables used for the symptom table data base
     string low = "low";
     string medium = "medium";
     string high = "high";
@@ -235,7 +235,8 @@ void option1(bool updateData, int patientIDbefore)
     {
         currentUser.ID = patientIDbefore;
     }
-
+	
+	//variables used for the date of birth input from the user
     bool passeddateOfBirthDay = 0;
     bool passeddateOfBirthMonth = 0;
     string checkUserDateIntYear = " ";
@@ -998,7 +999,7 @@ bool ReadSymptoms()
     if (SymptomRiskFileRead.fail())
     {
         cout << "\nFile failed to open successfully" << endl;
-        cout << "Unable  to  recommend  COVID  Test – required data missing" << endl;
+        cout << "Unable  to  recommend  COVID  Test Â– required data missing" << endl;
         return 0; //0 = failed to open error code.
     }
 
