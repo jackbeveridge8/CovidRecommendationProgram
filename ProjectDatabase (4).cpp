@@ -13,6 +13,7 @@ bool DateSyntaxCheck(string str, int amount, char DMY);
 bool checkVarChar(string str);
 bool isInputANumber(string str);
 bool isIDValid(string str);
+vector<char> stringToVarChar(string payload);
 
 class VarChar {        // The class
 public:          // Access specifier
@@ -1264,3 +1265,11 @@ bool checkVarChar(string str) {
     return result;
 
 }
+vector<char> stringToVarChar(string payload) {
+    vector<char> varChar(payload.begin(), payload.end());
+    //vector<char> data(payload.begin(), payload.end());
+    return varChar;
+    
+    
+}
+
