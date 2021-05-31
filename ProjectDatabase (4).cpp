@@ -166,11 +166,12 @@ void Menu(bool returningUser)
 void option1(bool updateData, int patientIDbefore)
 {
     user currentUser;
+    string state, suburb, street;
+    // list of all integer variables used
     int symptomLevelCode = 1, locationAmnt;
     // variable purely for exit of the while loops used in conjunction with the case statements
     int ex1 = 0;
 
-	//list of all string variables used and their validation variables used within each while loop.
     string firstName = " "; //first name variable
     bool passedFirstName = false;
     string lastName; //last name variable
@@ -185,7 +186,6 @@ void option1(bool updateData, int patientIDbefore)
     string overSeas; // overseas variable
     bool recommendTest = false;
 
-	//Variables used for the symptom table data base
     string low = "low";
     string medium = "medium";
     string high = "high";
@@ -235,8 +235,7 @@ void option1(bool updateData, int patientIDbefore)
     {
         currentUser.ID = patientIDbefore;
     }
-	
-	//variables used for the date of birth input from the user
+
     bool passeddateOfBirthDay = 0;
     bool passeddateOfBirthMonth = 0;
     string checkUserDateIntYear = " ";
@@ -426,6 +425,7 @@ void option1(bool updateData, int patientIDbefore)
 
 void option2()
 {
+	// Initialise Variables
     char reset = 0, ret, result, status;
     bool IDexistTest = 0;
     bool passedPatientID = 0;
@@ -433,9 +433,10 @@ void option2()
     int ID;
     string locations = "No"; 
 
+	//Set reset so when all the options are complete for a certain user can add one to the reset and exit this function
     while (reset < 1)
     {
-        
+		//Check if user inputs an already existing ID if not loops back to start
         while (!passedPatientID) {
             cout << "Please enter your 6 number ID:\t";
             cin >> patientID;
@@ -465,7 +466,6 @@ void option2()
                     cin.ignore();
                     getline(cin, locations);
                     string str = locations;
-                    vector<string> v;
                     stringstream ss(str);
                     while (ss.good())
                     {
@@ -490,23 +490,13 @@ void option2()
                     cin.ignore();
                     getline(cin, locations);
                     string str = locations;
-                    vector<string> v;
-
                     stringstream ss(str);
-
-                    while (ss.good()) {
+                    while (ss.good())
+                    {
                         string substr;
                         getline(ss, substr, ',');
-                        v.push_back(substr);
+                        enterHighRisk(substr);
                     }
-
-                    for (size_t i = 0; i < v.size(); i++)
-                    {
-                        //enterHighRisk(str);
-                        //enterHighRisk(str);
-                        //cout << str;
-                    }
-                    enterHighRisk(locations);
                 }
                 else
                 {
