@@ -284,21 +284,24 @@ void option1(bool updateData, int patientIDbefore)
     currentUser.dOB = dateOfBirth;
     //converting the string DOB to a integer as required for storage in the database
     
-
-    //living address input
-    while (!passedAddress) {
+//living address input
+    do {
         cout << "Please enter your living address in format of (streetnumber streetname suburb state)" << endl;
         cout << "Address:\t";
         getline(cin, addressS);
 
         if (checkVarChar(addressS)) {
             //assign varchar value
-            VarChar address(addressS);
+            //VarChar address(addressS);
             passedAddress = true;
         }
-    }
+    } while (!passedAddress);
+    VarChar addressV(addressS);
+    //vector<char> data;
+    vector<char> address = stringToVarChar(addressV.payload);
     currentUser.address = addressS;
 
+	// overseas travel validation and input
     while (ex1 < 1)
     {
         cout << "Have you travelled overseas recently? (yes/no):\t"; // input for if user did overseas travel
@@ -318,9 +321,12 @@ void option1(bool updateData, int patientIDbefore)
     }
     currentUser.overSeas = overSeas;
     ex1--;
+	
     // input for the level of symptoms the user is feeling
     cout << "What level of symptoms are you currently feeling?" << endl;
+	cout << endl;
     ReadSymptoms();
+	cout << endl;
     while (ex1 < 1)
     {
         /* while and case block like the previous blocks to make sure user only inputs integer 1, 2 or 3.
@@ -349,6 +355,7 @@ void option1(bool updateData, int patientIDbefore)
     ex1--;
     currentUser.symptomLevel = symptomLevel;
 
+	//input for amount of Covid locations been to
     cout << "If applicable, how many of these high risk Covid locations have you visted recently?" << endl;
     cout << "input 0 if you have visted none." << endl;
     option3();
@@ -358,9 +365,7 @@ void option1(bool updateData, int patientIDbefore)
 
     cout << endl;
 
-    /*
-     Algorithim of if the user needs a covid test or not
-     */
+     //Algorithim of if the user needs a covid test or not
     cout << "Based on your results," << endl;
     cout << "You are suffering " << symptomLevel << " level symptoms, and have visted " << locationAmnt << " high-risk Covid location sites." << endl << endl;
     if (symptomLevelCode == 3)
